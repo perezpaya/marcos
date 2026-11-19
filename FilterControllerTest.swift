@@ -49,15 +49,45 @@ struct FilterControllerTest {
         let restored = FilterController(defaults: defaults)
         precondition(restored.enabled && restored.strength == 2)
 
+        let originalWindows = visibleOverlays().map(\.windowNumber).sorted()
+        let originalButtonWidth = button.frame.width
         filter.strength = 0
+        precondition(!filter.enabled)
         precondition(visibleOverlays().isEmpty)
         precondition(button.image?.isTemplate == true)
+        precondition(button.frame.width == originalButtonWidth)
+        button.performClick(nil)
+        precondition(filter.enabled && filter.strength == 2)
+        precondition(visibleOverlays().map(\.windowNumber).sorted() == originalWindows)
+        filter.strength = 0
         filter.strength = 2
+        precondition(filter.enabled)
         precondition(visibleOverlays().count == screens.count)
         precondition(button.image?.isTemplate == false)
+
+        let blue = NSColor(srgbRed: 0.12, green: 0.36, blue: 0.8, alpha: 1)
+        filter.baseColor = blue
+        precondition(visibleOverlays().allSatisfy { $0.backgroundColor == blue })
+        let blueSettings = FilterController(defaults: defaults)
+        precondition(blueSettings.baseColor == blue)
         filter.enabled = false
         precondition(visibleOverlays().isEmpty)
         precondition(button.image?.isTemplate == true)
+        defaults.set([0.2, 0.3], forKey: "baseColor")
+        defaults.set(0, forKey: "filterStrength")
+        defaults.set(true, forKey: "filterEnabled")
+        let legacyZero = FilterController(defaults: defaults)
+        precondition(!legacyZero.enabled && legacyZero.baseColor == FilterController.defaultColor)
+        legacyZero.enabled = true
+        precondition(legacyZero.strength == 2 && legacyZero.enabled)
+        legacyZero.enabled = false
+        defaults.removeObject(forKey: "lastStrength")
+        defaults.set(60, forKey: "filterStrength")
+        let legacyStrength = FilterController(defaults: defaults)
+        legacyStrength.strength = 0
+        legacyStrength.enabled = true
+        precondition(legacyStrength.strength == 60)
+        legacyStrength.enabled = false
         print("Filter checks passed on \(screens.count) display(s).")
     }
 }

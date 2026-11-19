@@ -1,12 +1,15 @@
 # Marcos
 
-<img src="assets/app-icon.png" width="160" alt="Glasses with a charcoal frame, one clear lens and one red lens">
+<img src="assets/app-icon.png" width="160" alt="Illustrated portrait wearing black glasses with red lenses">
 
-A small native macOS menu bar app that adds an adjustable red tint to your screens.
+A small native macOS menu bar app that adds an adjustable color tint to your screens.
 
 - Left-click the glasses in the menu bar to toggle the filter.
-- Right-click or Control-click to open options, adjust strength, or quit.
-- Red glasses indicate an active tint. Clear glasses indicate the tint is off.
+- Right-click or Control-click to open options, adjust strength and base color, or quit.
+- Choose red, amber, green, blue, violet, or a custom color.
+- The menu bar glasses match the active tint. Clear glasses indicate the tint is off.
+- Sliding to 0% turns the filter off. The next toggle restores your last nonzero strength.
+- Moving the slider above 0% applies the tint, including while the filter is off.
 - Settings are saved automatically.
 - Launches at login after first opening. If macOS requires approval, use **Open Login Items** in the options.
 
@@ -24,7 +27,7 @@ open "$HOME/Applications/Marcos.app"
 
 The build uses Swift, AppKit, SwiftUI, and ServiceManagement. It signs the app locally with an ad-hoc signature. The app uses click-through overlay windows on connected displays and follows desktop Spaces and full-screen apps. Turning it off or quitting removes the overlays. A strength of 0% applies no tint.
 
-The filter adds a red tint and dims the image. Maximum strength is capped to preserve readability. Results depend on the display and content. It starts after you log in, and the filter is off on first launch.
+The filter adds a color tint and dims the image. Maximum strength is capped to preserve readability. Results depend on the display and content. It starts after you log in, and the filter is off on first launch.
 
 ## Verify
 
@@ -35,11 +38,11 @@ xcrun swiftc -warnings-as-errors FilterController.swift StatusMenu.swift FilterC
 /tmp/MarcosChecks
 ```
 
-The checks cover the left-click action, filter state, saved settings, strength changes, display reconfiguration, and menu icon states.
+The checks cover the left-click action, filter state, saved settings and colors, zero-strength recovery, display reconfiguration, and menu icon states.
 
 ## Icon
 
-The app icon has a neutral frame with one clear lens and one red lens. It was generated using OpenAI's built-in image generation tool. The generation prompt is in [assets/icon-prompt.txt](assets/icon-prompt.txt), the original PNG is in [assets/app-icon.png](assets/app-icon.png), and the macOS icon is in [assets/Marcos.icns](assets/Marcos.icns).
+The app icon is an illustrated portrait with black glasses and red lenses, created from a user-provided face reference using OpenAI's built-in image generation tool. The generation prompt is in [assets/icon-prompt.txt](assets/icon-prompt.txt), the PNG is in [assets/app-icon.png](assets/app-icon.png), and the macOS icon is in [assets/Marcos.icns](assets/Marcos.icns).
 
 ## License
 

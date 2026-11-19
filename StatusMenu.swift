@@ -4,28 +4,39 @@ import SwiftUI
 
 @MainActor
 final class StatusMenu: NSObject {
-    let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    let item = NSStatusBar.system.statusItem(withLength: 34)
     private let filter: FilterController
     private let popover = NSPopover()
     private var iconUpdates: AnyCancellable?
 
-    private let clearGlasses = NSImage(systemSymbolName: "eyeglasses", accessibilityDescription: nil)
-    private let redGlasses: NSImage? = {
-        guard let symbol = NSImage(systemSymbolName: "sunglasses.fill", accessibilityDescription: nil) else {
-            return nil
-        }
-        return NSImage(size: symbol.size, flipped: false) { bounds in
-            symbol.draw(in: bounds)
-            NSColor.systemRed.setFill()
-            bounds.fill(using: .sourceAtop)
+    private static func glasses(color: NSColor?) -> NSImage {
+        let image = NSImage(size: NSSize(width: 26, height: 16), flipped: false) { _ in
+            for x in [CGFloat(2), CGFloat(15)] {
+                let lens = NSBezierPath(roundedRect: NSRect(x: x, y: 3, width: 9, height: 9), xRadius: 2.5, yRadius: 2.5)
+                color?.setFill()
+                if color != nil { lens.fill() }
+                NSColor.labelColor.setStroke()
+                lens.lineWidth = 1.6
+                lens.stroke()
+            }
+            let frame = NSBezierPath()
+            frame.move(to: NSPoint(x: 11, y: 8))
+            frame.curve(to: NSPoint(x: 15, y: 8), controlPoint1: NSPoint(x: 12, y: 10), controlPoint2: NSPoint(x: 14, y: 10))
+            frame.move(to: NSPoint(x: 0.5, y: 11))
+            frame.line(to: NSPoint(x: 2, y: 10))
+            frame.move(to: NSPoint(x: 24, y: 10))
+            frame.line(to: NSPoint(x: 25.5, y: 11))
+            frame.lineWidth = 1.6
+            frame.stroke()
             return true
         }
-    }()
+        image.isTemplate = color == nil
+        return image
+    }
 
     init(filter: FilterController) {
         self.filter = filter
         super.init()
-        clearGlasses?.isTemplate = true
         popover.behavior = .transient
         popover.contentViewController = NSHostingController(rootView: FilterControls(filter: filter))
         item.autosaveName = "Marcos"
@@ -34,13 +45,13 @@ final class StatusMenu: NSObject {
         item.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
         item.button?.toolTip = "Marcos · Click to toggle · Right-click for options"
 
-        iconUpdates = filter.$enabled.combineLatest(filter.$strength)
-            .map { enabled, strength in enabled && strength > 0 }
-            .removeDuplicates()
-            .sink { [weak self] active in
+        iconUpdates = filter.$enabled.combineLatest(filter.$strength, filter.$baseColor)
+            .map { enabled, strength, color in enabled && strength > 0 ? color : nil }
+            .removeDuplicates { $0 == $1 }
+            .sink { [weak self] color in
                 guard let self, let button = item.button else { return }
-                button.image = active ? redGlasses ?? clearGlasses : clearGlasses
-                button.setAccessibilityLabel(active ? "Marcos, filter on" : "Marcos, filter off")
+                button.image = Self.glasses(color: color)
+                button.setAccessibilityLabel(color != nil ? "Marcos, filter on" : "Marcos, filter off")
             }
     }
 
@@ -62,26 +73,109 @@ final class StatusMenu: NSObject {
     }
 }
 
-private struct FilterControls: View {
+struct FilterControls: View {
     @ObservedObject var filter: FilterController
 
+    private let colors: [(name: String, color: NSColor)] = [
+        ("Red", .init(srgbRed: 0.65, green: 0, blue: 0, alpha: 1)),
+        ("Amber", .init(srgbRed: 0.8, green: 0.35, blue: 0.04, alpha: 1)),
+        ("Green", .init(srgbRed: 0.12, green: 0.52, blue: 0.3, alpha: 1)),
+        ("Blue", .init(srgbRed: 0.12, green: 0.36, blue: 0.8, alpha: 1)),
+        ("Violet", .init(srgbRed: 0.5, green: 0.22, blue: 0.75, alpha: 1)),
+    ]
+
+    private var tint: Color { Color(nsColor: filter.baseColor) }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Toggle("Red filter", isOn: $filter.enabled)
-                .toggleStyle(.switch)
-                .controlSize(.small)
-
-            Slider(value: $filter.strength, in: 0...100, step: 1) {
-                Text("Strength")
+        VStack(alignment: .leading, spacing: 20) {
+            HStack(spacing: 12) {
+                Image(nsImage: NSApplication.shared.applicationIconImage)
+                    .resizable()
+                    .frame(width: 40, height: 40)
+                    .clipShape(RoundedRectangle(cornerRadius: 9))
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Marcos")
+                        .font(.system(size: 19, weight: .semibold))
+                    Text(filter.enabled ? "On · All displays" : "Filter off")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Toggle("Screen tint", isOn: $filter.enabled)
+                    .labelsHidden()
+                    .toggleStyle(.switch)
+                    .tint(tint)
             }
-            .accessibilityValue(Text(filter.strength / 100, format: .percent.precision(.fractionLength(0))))
-            .disabled(!filter.enabled)
 
-            Text(filter.strength / 100, format: .percent.precision(.fractionLength(0)))
-                .monospacedDigit()
+            VStack(spacing: 12) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text("Strength")
+                        .font(.system(size: 13, weight: .medium))
+                    Spacer()
+                    Text(filter.strength / 100, format: .percent.precision(.fractionLength(0)))
+                        .font(.system(size: 27, weight: .medium, design: .rounded))
+                        .monospacedDigit()
+                        .accessibilityHidden(true)
+                }
+                Slider(value: Binding(
+                    get: { filter.strength },
+                    set: { filter.strength = $0.rounded() }
+                ), in: 0...100) {
+                    Text("Strength")
+                }
+                .labelsHidden()
+                .tint(tint)
+                .accessibilityValue(Text(filter.strength / 100, format: .percent.precision(.fractionLength(0))))
+
+                HStack {
+                    Text("Clear")
+                    Spacer()
+                    Text("Full tint")
+                }
+                .font(.caption)
                 .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, alignment: .trailing)
                 .accessibilityHidden(true)
+            }
+            .padding(16)
+            .background(.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 14))
+
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Text("Base color")
+                        .font(.system(size: 13, weight: .medium))
+                    Spacer()
+                    ColorPicker("Custom color", selection: Binding(
+                        get: { tint },
+                        set: { filter.baseColor = NSColor($0) }
+                    ), supportsOpacity: false)
+                    .font(.caption)
+                }
+
+                HStack(spacing: 12) {
+                    ForEach(colors, id: \.name) { preset in
+                        let selected = filter.baseColor.usingColorSpace(.sRGB) == preset.color
+                        Button {
+                            filter.baseColor = preset.color
+                        } label: {
+                            Circle()
+                                .fill(Color(nsColor: preset.color))
+                                .frame(width: 34, height: 34)
+                                .overlay {
+                                    if selected {
+                                        Image(systemName: "checkmark")
+                                            .font(.system(size: 12, weight: .bold))
+                                            .foregroundStyle(.white)
+                                    }
+                                }
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(preset.name)
+                        .accessibilityAddTraits(selected ? .isSelected : [])
+                        .help(preset.name)
+                    }
+                }
+            }
 
             Divider()
 
@@ -95,10 +189,23 @@ private struct FilterControls: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            Button("Quit Marcos") { NSApp.terminate(nil) }
+            HStack {
+                Text("Click to toggle · Right-click for options")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.secondary)
+                Spacer(minLength: 8)
+                Button {
+                    NSApp.terminate(nil)
+                } label: {
+                    Image(systemName: "power")
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Quit Marcos")
+                .help("Quit Marcos")
                 .keyboardShortcut("q")
+            }
         }
-        .padding(16)
-        .frame(width: 260)
+        .padding(20)
+        .frame(width: 320)
     }
 }

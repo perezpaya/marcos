@@ -4,6 +4,7 @@ import ServiceManagement
 
 @MainActor
 final class FilterController: NSObject, NSApplicationDelegate, ObservableObject {
+    static let defaultColor = NSColor(srgbRed: 0.65, green: 0, blue: 0, alpha: 1)
     private let defaults: UserDefaults
     private let logger = Logger(subsystem: "com.local.redfilter", category: "Login")
     private var overlays: [NSWindow] = []
@@ -12,6 +13,10 @@ final class FilterController: NSObject, NSApplicationDelegate, ObservableObject 
 
     @Published var enabled: Bool {
         didSet {
+            if enabled && strength == 0 {
+                let saved = defaults.double(forKey: "lastStrength")
+                strength = saved.isFinite && saved > 0 ? min(100, saved) : 45
+            }
             defaults.set(enabled, forKey: "filterEnabled")
             updateOverlays()
         }
@@ -20,6 +25,20 @@ final class FilterController: NSObject, NSApplicationDelegate, ObservableObject 
     @Published var strength: Double {
         didSet {
             defaults.set(strength, forKey: "filterStrength")
+            if strength > 0 {
+                defaults.set(strength, forKey: "lastStrength")
+            }
+            if enabled != (strength > 0) {
+                enabled = strength > 0
+            }
+            updateOverlays()
+        }
+    }
+
+    @Published var baseColor: NSColor {
+        didSet {
+            let rgb = baseColor.usingColorSpace(.sRGB) ?? Self.defaultColor
+            defaults.set([rgb.redComponent, rgb.greenComponent, rgb.blueComponent], forKey: "baseColor")
             updateOverlays()
         }
     }
@@ -30,10 +49,19 @@ final class FilterController: NSObject, NSApplicationDelegate, ObservableObject 
 
     init(defaults: UserDefaults) {
         self.defaults = defaults
-        enabled = defaults.bool(forKey: "filterEnabled")
         let savedStrength = defaults.object(forKey: "filterStrength") as? Double ?? 45
-        strength = min(100, max(0, savedStrength))
+        strength = savedStrength.isFinite ? min(100, max(0, savedStrength)) : 45
+        enabled = defaults.bool(forKey: "filterEnabled") && savedStrength > 0
+        if let rgb = defaults.array(forKey: "baseColor") as? [Double],
+           rgb.count == 3, rgb.allSatisfy({ $0.isFinite && (0...1).contains($0) }) {
+            baseColor = NSColor(srgbRed: rgb[0], green: rgb[1], blue: rgb[2], alpha: 1)
+        } else {
+            baseColor = Self.defaultColor
+        }
         super.init()
+        if strength > 0 {
+            defaults.set(strength, forKey: "lastStrength")
+        }
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -63,14 +91,16 @@ final class FilterController: NSObject, NSApplicationDelegate, ObservableObject 
 
     private func removeOverlays() {
         for overlay in overlays {
-            overlay.orderOut(nil)
+            overlay.close()
         }
         overlays.removeAll()
     }
 
     private func updateOverlays() {
         guard enabled, strength > 0 else {
-            removeOverlays()
+            for overlay in overlays {
+                overlay.orderOut(nil)
+            }
             return
         }
 
@@ -90,16 +120,22 @@ final class FilterController: NSObject, NSApplicationDelegate, ObservableObject 
                     .fullScreenAuxiliary, .canJoinAllApplications,
                 ]
                 overlay.isOpaque = true
+                overlay.isReleasedWhenClosed = false
                 overlay.hasShadow = false
+                overlay.animationBehavior = .none
                 overlay.ignoresMouseEvents = true
-                overlay.backgroundColor = NSColor(srgbRed: 0.65, green: 0, blue: 0, alpha: 1)
+                overlay.backgroundColor = baseColor.withAlphaComponent(1)
                 overlay.alphaValue = opacity
                 overlay.orderFrontRegardless()
                 return overlay
             }
         } else {
             for overlay in overlays {
+                overlay.backgroundColor = baseColor.withAlphaComponent(1)
                 overlay.alphaValue = opacity
+                if !overlay.isVisible {
+                    overlay.orderFrontRegardless()
+                }
             }
         }
     }

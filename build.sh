@@ -14,5 +14,6 @@ xcrun swiftc -target "$(uname -m)-apple-macos13.0" -O -warnings-as-errors \
     "$source_dir/RedFilterApp.swift" "$source_dir/FilterController.swift" "$source_dir/StatusMenu.swift" \
     -o "$bundle/Contents/MacOS/RedFilter"
 codesign --force --sign - "$bundle"
+codesign --verify --strict "$bundle"
 mkdir -p "$(dirname "$destination")"
 ditto "$bundle" "$destination"
