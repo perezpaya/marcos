@@ -76,14 +76,6 @@ final class StatusMenu: NSObject {
 struct FilterControls: View {
     @ObservedObject var filter: FilterController
 
-    private let colors: [(name: String, color: NSColor)] = [
-        ("Red", .init(srgbRed: 0.65, green: 0, blue: 0, alpha: 1)),
-        ("Amber", .init(srgbRed: 0.8, green: 0.35, blue: 0.04, alpha: 1)),
-        ("Green", .init(srgbRed: 0.12, green: 0.52, blue: 0.3, alpha: 1)),
-        ("Blue", .init(srgbRed: 0.12, green: 0.36, blue: 0.8, alpha: 1)),
-        ("Violet", .init(srgbRed: 0.5, green: 0.22, blue: 0.75, alpha: 1)),
-    ]
-
     private var tint: Color { Color(nsColor: filter.baseColor) }
 
     var body: some View {
@@ -141,33 +133,31 @@ struct FilterControls: View {
             .background(.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 14))
 
             VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Text("Base color")
-                        .font(.system(size: 13, weight: .medium))
-                    Spacer()
-                    ColorPicker("Custom color", selection: Binding(
-                        get: { tint },
-                        set: { filter.baseColor = NSColor($0) }
-                    ), supportsOpacity: false)
-                    .font(.caption)
-                }
+                Text("Warm tint")
+                    .font(.system(size: 13, weight: .medium))
 
                 HStack(spacing: 12) {
-                    ForEach(colors, id: \.name) { preset in
+                    ForEach(FilterController.colors, id: \.name) { preset in
                         let selected = filter.baseColor.usingColorSpace(.sRGB) == preset.color
                         Button {
                             filter.baseColor = preset.color
                         } label: {
-                            Circle()
-                                .fill(Color(nsColor: preset.color))
-                                .frame(width: 34, height: 34)
-                                .overlay {
-                                    if selected {
-                                        Image(systemName: "checkmark")
-                                            .font(.system(size: 12, weight: .bold))
-                                            .foregroundStyle(.white)
+                            VStack(spacing: 7) {
+                                Circle()
+                                    .fill(Color(nsColor: preset.color))
+                                    .frame(width: 34, height: 34)
+                                    .overlay {
+                                        if selected {
+                                            Image(systemName: "checkmark")
+                                                .font(.system(size: 12, weight: .bold))
+                                                .foregroundStyle(.white)
+                                        }
                                     }
-                                }
+                                Text(preset.name)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel(preset.name)

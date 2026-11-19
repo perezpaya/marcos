@@ -5,6 +5,11 @@ import ServiceManagement
 @MainActor
 final class FilterController: NSObject, NSApplicationDelegate, ObservableObject {
     static let defaultColor = NSColor(srgbRed: 0.65, green: 0, blue: 0, alpha: 1)
+    static let colors: [(name: String, color: NSColor)] = [
+        ("Red", defaultColor),
+        ("Orange", .init(srgbRed: 0.8, green: 0.16, blue: 0, alpha: 1)),
+        ("Amber", .init(srgbRed: 0.8, green: 0.35, blue: 0.04, alpha: 1)),
+    ]
     private let defaults: UserDefaults
     private let logger = Logger(subsystem: "com.local.redfilter", category: "Login")
     private var overlays: [NSWindow] = []
@@ -56,7 +61,8 @@ final class FilterController: NSObject, NSApplicationDelegate, ObservableObject 
         enabled = defaults.bool(forKey: "filterEnabled") && savedStrength > 0
         if let rgb = defaults.array(forKey: "baseColor") as? [Double],
            rgb.count == 3, rgb.allSatisfy({ $0.isFinite && (0...1).contains($0) }) {
-            baseColor = NSColor(srgbRed: rgb[0], green: rgb[1], blue: rgb[2], alpha: 1)
+            let savedColor = NSColor(srgbRed: rgb[0], green: rgb[1], blue: rgb[2], alpha: 1)
+            baseColor = Self.colors.first(where: { $0.color == savedColor })?.color ?? Self.defaultColor
         } else {
             baseColor = Self.defaultColor
         }

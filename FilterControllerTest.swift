@@ -69,14 +69,17 @@ struct FilterControllerTest {
         precondition(visibleOverlays().count == screens.count)
         precondition(button.image?.isTemplate == false)
 
-        let blue = NSColor(srgbRed: 0.12, green: 0.36, blue: 0.8, alpha: 1)
-        filter.baseColor = blue
-        precondition(visibleOverlays().allSatisfy { $0.backgroundColor == blue })
-        let blueSettings = FilterController(defaults: defaults)
-        precondition(blueSettings.baseColor == blue)
+        let amber = NSColor(srgbRed: 0.8, green: 0.35, blue: 0.04, alpha: 1)
+        filter.baseColor = amber
+        precondition(visibleOverlays().allSatisfy { $0.backgroundColor == amber })
+        let amberSettings = FilterController(defaults: defaults)
+        precondition(amberSettings.baseColor == amber)
         filter.enabled = false
         precondition(visibleOverlays().isEmpty)
         precondition(button.image?.isTemplate == true)
+        defaults.set([0.12, 0.36, 0.8], forKey: "baseColor")
+        let oldBlueSettings = FilterController(defaults: defaults)
+        precondition(oldBlueSettings.baseColor == FilterController.defaultColor)
         defaults.set([0.2, 0.3], forKey: "baseColor")
         defaults.set(0, forKey: "filterStrength")
         defaults.set(true, forKey: "filterEnabled")

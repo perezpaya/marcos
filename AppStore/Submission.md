@@ -2,7 +2,7 @@
 
 ## Release build
 
-Version 1.2.1, build 4. The release target uses bundle identifier `com.perezpaya.marcos`, App Sandbox, and hardened runtime. It builds for Apple silicon and Intel Macs running macOS 13 or later.
+Version 1.2.2, build 5. The release target uses bundle identifier `com.perezpaya.marcos`, App Sandbox, and hardened runtime. It builds for Apple silicon and Intel Macs running macOS 13 or later.
 
 Open `Marcos.xcodeproj`, select the Marcos target, and choose the publishing Apple Developer team in Signing & Capabilities. The checked-in project is ready to open in Xcode. `project.yml` is its XcodeGen source.
 
@@ -24,7 +24,7 @@ An unsigned archive has been built locally. Distribution signing, an App Store p
 
 Give your displays a color tint from the menu bar.
 
-Click the glasses to turn the tint on or off. Right-click to choose a base color and adjust its strength. Use one of five presets or choose a custom color.
+Click the glasses to turn the tint on or off. Right-click to choose a red, orange, or amber tint and adjust its strength.
 
 Marcos applies the tint across your connected displays and remembers your settings. Sliding to 0% turns the tint off. Your next toggle restores the previous strength. Enable Launch at login to keep Marcos ready when you sign in.
 

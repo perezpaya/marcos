@@ -6,7 +6,7 @@ A small native macOS menu bar app that adds an adjustable color tint to your scr
 
 - Left-click the glasses in the menu bar to toggle the filter.
 - Right-click or Control-click to open options, adjust strength and base color, or quit.
-- Choose red, amber, green, blue, violet, or a custom color.
+- Choose a red, orange, or amber tint.
 - The menu bar glasses match the active tint. Clear glasses indicate the tint is off.
 - Sliding to 0% turns the filter off. The next toggle restores your last nonzero strength.
 - Moving the slider above 0% applies the tint, including while the filter is off.
