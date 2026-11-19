@@ -11,7 +11,7 @@ A small native macOS menu bar app that adds an adjustable color tint to your scr
 - Sliding to 0% turns the filter off. The next toggle restores your last nonzero strength.
 - Moving the slider above 0% applies the tint, including while the filter is off.
 - Settings are saved automatically.
-- Launches at login after first opening. If macOS requires approval, use **Open Login Items** in the options.
+- Enable **Launch at login** in the options to start Marcos automatically. If macOS requires approval, use **Open Login Items**.
 
 ## Build and install
 
@@ -39,6 +39,12 @@ xcrun swiftc -warnings-as-errors FilterController.swift StatusMenu.swift FilterC
 ```
 
 The checks cover the left-click action, filter state, saved settings and colors, zero-strength recovery, display reconfiguration, and menu icon states.
+
+## Mac App Store preparation
+
+Open `Marcos.xcodeproj` for the sandboxed universal Mac release target. The App Store release configuration, proposed listing, and signing instructions are in [AppStore/Submission.md](AppStore/Submission.md). Distribution signing, upload, and review are still pending.
+
+Read the [privacy policy](PRIVACY.md).
 
 ## Icon
 

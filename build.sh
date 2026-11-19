@@ -10,6 +10,7 @@ bundle="$build_dir/Marcos.app"
 mkdir -p "$bundle/Contents/MacOS" "$bundle/Contents/Resources"
 cp "$source_dir/Info.plist" "$bundle/Contents/Info.plist"
 cp "$source_dir/assets/Marcos.icns" "$bundle/Contents/Resources/Marcos.icns"
+cp "$source_dir/PrivacyInfo.xcprivacy" "$bundle/Contents/Resources/PrivacyInfo.xcprivacy"
 xcrun swiftc -target "$(uname -m)-apple-macos13.0" -O -warnings-as-errors \
     "$source_dir/RedFilterApp.swift" "$source_dir/FilterController.swift" "$source_dir/StatusMenu.swift" \
     -o "$bundle/Contents/MacOS/RedFilter"

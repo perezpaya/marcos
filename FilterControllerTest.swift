@@ -1,4 +1,5 @@
 import AppKit
+import ServiceManagement
 
 @main
 struct FilterControllerTest {
@@ -15,6 +16,9 @@ struct FilterControllerTest {
         let filter = FilterController(defaults: defaults)
         let menu = StatusMenu(filter: filter)
         let button = menu.item.button!
+        let loginStatus = SMAppService.mainApp.status
+        filter.applicationDidFinishLaunching(Notification(name: NSApplication.didFinishLaunchingNotification))
+        precondition(SMAppService.mainApp.status == loginStatus)
 
         func visibleOverlays() -> [NSWindow] {
             app.windows.filter { $0.isVisible && $0.level == .screenSaver }

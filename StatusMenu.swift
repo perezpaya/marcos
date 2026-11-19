@@ -179,6 +179,13 @@ struct FilterControls: View {
 
             Divider()
 
+            Toggle("Launch at login", isOn: Binding(
+                get: { filter.launchAtLogin },
+                set: { filter.setLaunchAtLogin($0) }
+            ))
+            .toggleStyle(.switch)
+            .controlSize(.small)
+
             if filter.loginNeedsAttention {
                 Button("Open Login Items") {
                     SMAppService.openSystemSettingsLoginItems()
@@ -189,9 +196,16 @@ struct FilterControls: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
+            if let error = filter.loginError {
+                Text(error)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
             HStack {
-                Text("Click to toggle · Right-click for options")
-                    .font(.system(size: 10))
+                Link("Privacy policy", destination: URL(string: "https://github.com/perezpaya/marcos/blob/main/PRIVACY.md")!)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer(minLength: 8)
                 Button {

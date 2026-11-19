@@ -10,6 +10,8 @@ final class FilterController: NSObject, NSApplicationDelegate, ObservableObject 
     private var overlays: [NSWindow] = []
 
     @Published private(set) var loginNeedsAttention = false
+    @Published private(set) var launchAtLogin = false
+    @Published private(set) var loginError: String?
 
     @Published var enabled: Bool {
         didSet {
@@ -66,22 +68,29 @@ final class FilterController: NSObject, NSApplicationDelegate, ObservableObject 
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         updateOverlays()
-        let loginItem = SMAppService.mainApp
-        let initialStatus = loginItem.status
-        if (initialStatus == .notRegistered || initialStatus == .notFound) &&
-            !defaults.bool(forKey: "loginRegistered") {
-            do {
-                try loginItem.register()
-            } catch {
-                logger.error("Login item registration failed: \(error.localizedDescription, privacy: .public)")
+        refreshLoginStatus()
+    }
+
+    func setLaunchAtLogin(_ enabled: Bool) {
+        loginError = nil
+        do {
+            if enabled {
+                try SMAppService.mainApp.register()
+            } else {
+                try SMAppService.mainApp.unregister()
             }
+        } catch {
+            loginError = error.localizedDescription
+            logger.error("Login item update failed: \(error.localizedDescription, privacy: .public)")
         }
-        let status = loginItem.status
-        loginNeedsAttention = status != .enabled
-        if status == .enabled {
-            defaults.set(true, forKey: "loginRegistered")
-        }
-        logger.info("Login item status: \(initialStatus.rawValue, privacy: .public) → \(status.rawValue, privacy: .public)")
+        refreshLoginStatus()
+    }
+
+    private func refreshLoginStatus() {
+        let status = SMAppService.mainApp.status
+        launchAtLogin = status == .enabled || status == .requiresApproval
+        loginNeedsAttention = status == .requiresApproval
+        logger.info("Login item status: \(status.rawValue, privacy: .public)")
     }
 
     func applicationDidChangeScreenParameters(_ notification: Notification) {

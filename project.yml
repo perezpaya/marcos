@@ -1,0 +1,52 @@
+name: Marcos
+options:
+  deploymentTarget:
+    macOS: "13.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.2.1"
+    CURRENT_PROJECT_VERSION: "4"
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_HARDENED_RUNTIME: YES
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+    DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+targets:
+  Marcos:
+    type: application
+    platform: macOS
+    sources:
+      - RedFilterApp.swift
+      - FilterController.swift
+      - StatusMenu.swift
+      - path: assets/Marcos.icns
+        buildPhase: resources
+      - path: PrivacyInfo.xcprivacy
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.perezpaya.marcos
+        PRODUCT_NAME: Marcos
+        ENABLE_APP_SANDBOX: YES
+        CODE_SIGN_ENTITLEMENTS: AppStore/Marcos.entitlements
+    info:
+      path: AppStore/Info.plist
+      properties:
+        CFBundleDisplayName: Marcos
+        CFBundleIconFile: Marcos
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSUIElement: true
+        LSApplicationCategoryType: public.app-category.utilities
+        NSHumanReadableCopyright: Copyright © 2026 Alejandro Perezpayá
+        ITSAppUsesNonExemptEncryption: false
+schemes:
+  Marcos:
+    build:
+      targets:
+        Marcos: all
+    run:
+      config: Debug
+    archive:
+      config: Release
