@@ -1,55 +1,52 @@
-# Marcos
+<div align="center">
+  <img src="assets/app-icon.png" width="112" alt="Marcos app icon">
+  <h1>Marcos</h1>
+  <p>Warm screen tints for your Mac.</p>
+  <p><a href="https://github.com/perezpaya/marcos/releases/latest"><strong>Download for macOS</strong></a> · <a href="https://github.com/perezpaya/marcos/releases">Releases &amp; release notes</a></p>
+  <p>Free and open source · macOS 13 or later · Apple silicon and Intel</p>
+</div>
 
-<img src="assets/app-icon.png" width="160" alt="Illustrated portrait wearing black glasses with red lenses">
+Marcos adds a warm tint to your screens, with a simple control in your menu bar. Choose red, orange, or amber, adjust the strength, and turn it on or off with one click.
 
-A small native macOS menu bar app that adds an adjustable color tint to your screens.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="AppStore/Screenshots/02-controls-dark.jpg">
+  <img src="AppStore/Screenshots/01-controls-light.jpg" width="800" alt="Marcos menu with red, orange and amber presets, an adjustable strength slider, and a launch-at-login switch">
+</picture>
 
-- Left-click the glasses in the menu bar to toggle the filter.
-- Right-click or Control-click to open options, adjust strength and base color, or quit.
-- Choose a red, orange, or amber tint.
-- The menu bar glasses match the active tint. Clear glasses indicate the tint is off.
-- Sliding to 0% turns the filter off. The next toggle restores your last nonzero strength.
-- Moving the slider above 0% applies the tint, including while the filter is off.
-- Settings are saved automatically.
-- Enable **Launch at login** in the options to start Marcos automatically. If macOS requires approval, use **Open Login Items**.
+- Apply the same tint across your connected displays, including full-screen apps.
+- Keep your preferred color and strength saved between sessions.
+- Enable **Launch at login** to keep Marcos ready when you sign in.
+- See your selected tint in the menu bar glasses. Clear lenses show that the filter is off.
 
-## Build and install
+## Install
 
-Requires macOS 13 or later and the Xcode command line tools. The build targets the architecture of the Mac running it.
+1. [Download the latest installer](https://github.com/perezpaya/marcos/releases/latest).
+2. Open the `.pkg` file and follow the installation steps.
+3. Open **Marcos** from **Applications** and look for the glasses in your menu bar.
 
-```sh
-git clone https://github.com/perezpaya/marcos.git
-cd marcos
-./build.sh
-ditto "build/Marcos.app" "$HOME/Applications/Marcos.app"
-open "$HOME/Applications/Marcos.app"
-```
+The current installer is unsigned and unnotarized, so macOS may block installation or launch.
 
-The build uses Swift, AppKit, SwiftUI, and ServiceManagement. It signs the app locally with an ad-hoc signature. The app uses click-through overlay windows on connected displays and follows desktop Spaces and full-screen apps. Turning it off or quitting removes the overlays. A strength of 0% applies no tint.
+## Use Marcos
 
-The filter adds a color tint and dims the image. Maximum strength is capped to preserve readability. Results depend on the display and content. It starts after you log in, and the filter is off on first launch.
+| Action | What happens |
+| --- | --- |
+| Click the menu bar glasses | Turn the tint on or off |
+| Right-click or Control-click the glasses | Open color, strength, and login options |
+| Set strength to 0% | Turn the tint off. The next toggle restores your previous strength |
 
-## Verify
+The tint is off when you first open Marcos.
 
-Run in a logged-in macOS desktop session. These checks briefly toggle the filter and create faint overlays, then remove them.
+## Releases
 
-```sh
-xcrun swiftc -warnings-as-errors FilterController.swift StatusMenu.swift FilterControllerTest.swift -o /tmp/MarcosChecks
-/tmp/MarcosChecks
-```
+| Version | Installer | Changes |
+| --- | --- | --- |
+| **1.2.2 · Latest** | [Download for Mac](https://github.com/perezpaya/marcos/releases/download/v1.2.2/Marcos-1.2.2-universal.pkg) | [Release notes](https://github.com/perezpaya/marcos/releases/tag/v1.2.2) |
+| 1.2.1 | [Download for Mac](https://github.com/perezpaya/marcos/releases/download/v1.2.1/Marcos-1.2.1-universal.pkg) | [Release notes](https://github.com/perezpaya/marcos/releases/tag/v1.2.1) |
 
-The checks cover the left-click action, filter state, saved settings and colors, zero-strength recovery, display reconfiguration, and menu icon states.
+[Browse all releases](https://github.com/perezpaya/marcos/releases) for previous versions and download checksums.
 
-## Mac App Store preparation
+## Support
 
-Open `Marcos.xcodeproj` for the sandboxed universal Mac release target. The App Store release configuration, proposed listing, and signing instructions are in [AppStore/Submission.md](AppStore/Submission.md). Distribution signing, upload, and review are still pending.
+[Report a problem or request a feature](https://github.com/perezpaya/marcos/issues).
 
-Read the [privacy policy](PRIVACY.md).
-
-## Icon
-
-The app icon is an illustrated portrait with black glasses and red lenses, created from a user-provided face reference using OpenAI's built-in image generation tool. The generation prompt is in [assets/icon-prompt.txt](assets/icon-prompt.txt), the PNG is in [assets/app-icon.png](assets/app-icon.png), and the macOS icon is in [assets/Marcos.icns](assets/Marcos.icns).
-
-## License
-
-MIT. See [LICENSE](LICENSE).
+[Privacy policy](PRIVACY.md) · [Build from source](DEVELOPMENT.md) · [MIT license](LICENSE)
