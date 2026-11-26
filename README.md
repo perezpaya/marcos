@@ -20,11 +20,11 @@ Marcos adds a warm tint to your screens, with a simple control in your menu bar.
 
 ## Install
 
-1. [Download the latest installer](https://github.com/perezpaya/marcos/releases/latest).
-2. Open the `.pkg` file and follow the installation steps.
+1. [Download Marcos for Mac](https://github.com/perezpaya/marcos/releases/latest).
+2. Open the `.zip` file and move **Marcos.app** to **Applications**. If Marcos is already running, quit it before replacing it.
 3. Open **Marcos** from **Applications** and look for the glasses in your menu bar.
 
-The current installer is unsigned and unnotarized, so macOS may block installation or launch.
+Marcos 1.2.3 is signed with Developer ID and notarized by Apple. macOS may ask you to confirm the first launch of an app downloaded from the internet.
 
 ## Use Marcos
 
@@ -38,9 +38,10 @@ The tint is off when you first open Marcos.
 
 ## Releases
 
-| Version | Installer | Changes |
+| Version | Download | Changes |
 | --- | --- | --- |
-| **1.2.2 · Latest** | [Download for Mac](https://github.com/perezpaya/marcos/releases/download/v1.2.2/Marcos-1.2.2-universal.pkg) | [Release notes](https://github.com/perezpaya/marcos/releases/tag/v1.2.2) |
+| **1.2.3 · Latest** | [Download for Mac](https://github.com/perezpaya/marcos/releases/download/v1.2.3/Marcos-1.2.3-universal.zip) | [Release notes](https://github.com/perezpaya/marcos/releases/tag/v1.2.3) |
+| 1.2.2 | [Download for Mac](https://github.com/perezpaya/marcos/releases/download/v1.2.2/Marcos-1.2.2-universal.pkg) | [Release notes](https://github.com/perezpaya/marcos/releases/tag/v1.2.2) |
 | 1.2.1 | [Download for Mac](https://github.com/perezpaya/marcos/releases/download/v1.2.1/Marcos-1.2.1-universal.pkg) | [Release notes](https://github.com/perezpaya/marcos/releases/tag/v1.2.1) |
 
 [Browse all releases](https://github.com/perezpaya/marcos/releases) for previous versions and download checksums.
