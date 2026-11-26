@@ -7,6 +7,16 @@ struct FilterControllerTest {
     static func main() {
         let app = NSApplication.shared
         app.setActivationPolicy(.accessory)
+        Task { @MainActor in
+            await runChecks()
+            app.terminate(nil)
+        }
+        app.run()
+    }
+
+    @MainActor
+    private static func runChecks() async {
+        let app = NSApplication.shared
         let screens = NSScreen.screens
         precondition(!screens.isEmpty, "Run in a logged-in macOS desktop session")
 
@@ -23,6 +33,30 @@ struct FilterControllerTest {
         func visibleOverlays() -> [NSWindow] {
             app.windows.filter { $0.isVisible && $0.level == .screenSaver }
         }
+
+        for screen in [
+            NSRect(x: 0, y: 0, width: 1280, height: 800),
+            NSRect(x: 0, y: 0, width: 1440, height: 900),
+            NSRect(x: -1280, y: -800, width: 1280, height: 800),
+        ] {
+            let visible = NSRect(x: screen.minX, y: screen.minY + 50, width: screen.width, height: screen.height - 74)
+            let anchor = NSRect(x: screen.maxX - 50, y: screen.maxY - 24, width: 34, height: 24)
+            let frame = StatusMenu.optionsFrame(size: NSSize(width: 340, height: 460), anchor: anchor, visibleFrame: visible)
+            precondition(frame.maxY == anchor.minY)
+            precondition(visible.contains(frame))
+        }
+
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        menu.showOptions()
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        let options = menu.popover.contentViewController!.view.window!
+        let anchorWindow = button.window!
+        let anchor = anchorWindow.convertToScreen(button.convert(button.bounds, to: nil))
+        precondition(abs(options.frame.maxY - min(anchor.minY, anchorWindow.screen!.visibleFrame.maxY)) < 1)
+        menu.popover.contentSize.height += 60
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        precondition(abs(options.frame.maxY - min(anchor.minY, anchorWindow.screen!.visibleFrame.maxY)) < 1)
+        menu.popover.close()
 
         precondition(!filter.enabled && filter.strength == 45 && visibleOverlays().isEmpty)
         precondition(button.image?.isTemplate == true)

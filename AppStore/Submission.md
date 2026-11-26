@@ -2,7 +2,7 @@
 
 ## Release build
 
-Version 1.2.2, build 5. The release target uses bundle identifier `com.perezpaya.marcos`, App Sandbox, and hardened runtime. It builds for Apple silicon and Intel Macs running macOS 13 or later.
+Version 1.2.3, build 6. The release target uses bundle identifier `com.perezpaya.marcos`, App Sandbox, and hardened runtime. It builds for Apple silicon and Intel Macs running macOS 13 or later.
 
 Open `Marcos.xcodeproj`, select the Marcos target, and choose the publishing Apple Developer team in Signing & Capabilities. The checked-in project is ready to open in Xcode. `project.yml` is its XcodeGen source.
 

@@ -3,11 +3,12 @@ import ServiceManagement
 import SwiftUI
 
 @MainActor
-final class StatusMenu: NSObject {
+final class StatusMenu: NSObject, NSPopoverDelegate {
     let item = NSStatusBar.system.statusItem(withLength: 34)
     private let filter: FilterController
-    private let popover = NSPopover()
+    let popover = NSPopover()
     private var iconUpdates: AnyCancellable?
+    private var resizeUpdates: AnyCancellable?
 
     private static func glasses(color: NSColor?) -> NSImage {
         let image = NSImage(size: NSSize(width: 26, height: 16), flipped: false) { _ in
@@ -38,6 +39,8 @@ final class StatusMenu: NSObject {
         self.filter = filter
         super.init()
         popover.behavior = .transient
+        popover.animates = false
+        popover.delegate = self
         popover.contentViewController = NSHostingController(rootView: FilterControls(filter: filter))
         item.autosaveName = "Marcos"
         item.button?.target = self
@@ -64,12 +67,45 @@ final class StatusMenu: NSObject {
             filter.enabled.toggle()
             return
         }
-        guard let button = item.button else { return }
         if popover.isShown {
             popover.performClose(nil)
         } else {
-            popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+            showOptions()
         }
+    }
+
+    func showOptions() {
+        guard let button = item.button, let view = popover.contentViewController?.view else { return }
+        popover.contentSize = view.fittingSize
+        popover.show(relativeTo: button.bounds, of: button, preferredEdge: button.isFlipped ? .maxY : .minY)
+        // AppKit finishes attaching the popover window on the next event-loop pass.
+        DispatchQueue.main.async { [weak self] in
+            guard let self, popover.isShown, let window = popover.contentViewController?.view.window else { return }
+            alignOptions()
+            resizeUpdates = NotificationCenter.default.publisher(for: NSWindow.didResizeNotification, object: window)
+                .sink { [weak self] _ in self?.alignOptions() }
+        }
+    }
+
+    func popoverDidClose(_ notification: Notification) {
+        resizeUpdates = nil
+    }
+
+    private func alignOptions() {
+        guard popover.isShown, let button = item.button, let anchorWindow = button.window,
+              let screen = anchorWindow.screen,
+              let window = popover.contentViewController?.view.window else { return }
+        let anchor = anchorWindow.convertToScreen(button.convert(button.bounds, to: nil))
+        let frame = Self.optionsFrame(size: window.frame.size, anchor: anchor, visibleFrame: screen.visibleFrame)
+        if window.frame.origin != frame.origin {
+            window.setFrameOrigin(frame.origin)
+        }
+    }
+
+    static func optionsFrame(size: NSSize, anchor: NSRect, visibleFrame: NSRect) -> NSRect {
+        let x = max(visibleFrame.minX, min(anchor.midX - size.width / 2, visibleFrame.maxX - size.width))
+        let top = min(anchor.minY, visibleFrame.maxY)
+        return NSRect(x: x, y: top - size.height, width: size.width, height: size.height)
     }
 }
 
