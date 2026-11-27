@@ -8,31 +8,19 @@ Open `Marcos.xcodeproj`, select the Marcos target, and choose the publishing App
 
 The Mac App Store bundle has its own sandbox container and preferences. Preferences from the locally installed `com.local.redfilter` build are separate.
 
-An unsigned archive has been built locally. Distribution signing, an App Store provisioning profile, an App Store Connect app record, and Apple review remain pending.
+A universal sandboxed archive and App Store distribution-signed package were built on November 27, 2026 using the personal developer team. Signature integrity and sandbox entitlements passed local checks. Apple processed build 6, and version 1.2.3 was submitted on November 27, 2026. Its verified status is Waiting for Review; automatic release after approval is selected. See [build status](Preview/BuildStatus.md).
 
-## Proposed listing
+## Submitted listing
 
-**Name** Marcos
+**Name** Marcos: Screen Tint
 
-**Subtitle** Screen tint, one click away
+**Subtitle** Warm colors. One click away.
 
 **Category** Utilities
 
 **Price** Free
 
-**Description**
-
-Give your displays a color tint from the menu bar.
-
-Click the glasses to turn the tint on or off. Right-click to choose a red, orange, or amber tint and adjust its strength.
-
-Marcos applies the tint across your connected displays and remembers your settings. Sliding to 0% turns the tint off. Your next toggle restores the previous strength. Enable Launch at login to keep Marcos ready when you sign in.
-
-The menu bar glasses show your selected color while the tint is active and clear lenses when it is off.
-
-Marcos works locally on your Mac, with no accounts, advertising, tracking, or analytics.
-
-**Keywords** screen,tint,color,filter,red,menu bar,display,night,brightness,overlay
+The revised product description, promotional text, keyword field, distribution intent, and review notes are in [the submitted listing](Preview/Listing.md) and [structured metadata](Preview/metadata.en-US.json). These supersede the earlier proposed copy. The listing and all five screenshots were submitted to Apple.
 
 **Support URL** https://github.com/perezpaya/marcos/issues
 
@@ -42,19 +30,19 @@ Marcos works locally on your Mac, with no accounts, advertising, tracking, or an
 
 ## Screenshots
 
-`Screenshots/01-controls-light.jpg` and `Screenshots/02-controls-dark.jpg` contain native UI captures on neutral backgrounds. Both use Apple's accepted 2880 × 1800 Mac screenshot dimensions.
+The new five-image campaign is in [the review gallery](Preview/index.html). All exports are 2880 × 1800 sRGB JPEGs, using a labeled physical MacBook render for the first image and captures of the production SwiftUI controls with labeled original desktop illustrations for images 2–5. The user approved the revised MacBook screenshot and requested publication on November 27, 2026. No further screenshot approval is needed. The submission is Waiting for Review. The older `Screenshots/01-controls-light.jpg` and `Screenshots/02-controls-dark.jpg` remain available for the existing GitHub README.
 
 ## Privacy and review
 
-The proposed App Privacy response is Data Not Collected. The app has no network entitlement and contains no analytics or third-party SDKs. Its privacy manifest declares local preference access using reason CA92.1.
+The published App Privacy response is Data Not Collected. The app has no network entitlement and contains no analytics or third-party SDKs. Its privacy manifest declares local preference access using reason CA92.1.
 
 Reviewer notes should explain that Marcos runs in the menu bar without a Dock icon. Left-click the glasses to toggle the filter. Right-click or Control-click to open options. Launch at login is opt-in. No account or special hardware is required.
 
-The age-rating questionnaire, review contact details, distribution territories, final pricing, and content-rights declaration must be completed in App Store Connect. The content-rights declaration must accurately cover the portrait icon and its source reference.
+The age-rating questionnaire, private review contact, pricing, availability, and user-confirmed content-rights declaration are saved in App Store Connect. The general-audience rating is 4+ with regional equivalents. Pricing is free in all 175 current countries and regions, including future territories.
 
 ## Signing and upload
 
-After approval to create or update App IDs, certificates, and provisioning profiles in the selected Apple Developer account, archive through Xcode Organizer or run the following commands with the publishing team identifier.
+Use the approved personal developer team when signing. Archive through Xcode Organizer or run the following commands with its team identifier. Do not switch to a company team. The current build has been submitted; the commands below describe rebuilding for future submissions.
 
 ```sh
 xcodebuild -project Marcos.xcodeproj -scheme Marcos \

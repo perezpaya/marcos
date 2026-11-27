@@ -1,0 +1,17 @@
+A warmer screen. One click away.
+
+Marcos brings red, orange, and amber tints to your Mac. Choose a color, set the strength, and click the glasses in your menu bar to turn it on or off.
+
+FIND YOUR KIND OF WARM
+Go for a subtle glow or a deeper tint. Adjust the strength from 0 to 100% to suit what you are doing. Sliding to zero clears the tint; your next click restores your last strength.
+
+ONE SETTING. EVERY DISPLAY.
+Apply the same tint across your connected displays, including full-screen apps. Your chosen color and strength are saved between sessions.
+
+READY WHEN YOU ARE
+Keep Marcos in the menu bar and optionally launch it when you log in. Right-click or Control-click the glasses for color, strength, and login options. Colored lenses mean the tint is on. Clear lenses mean it is off.
+
+YOUR MAC. YOUR SETTINGS.
+Marcos works locally. No account, advertising, tracking, or analytics. Your tint settings stay on your Mac, and Marcos does not capture or inspect screen content.
+
+Built for Apple silicon and Intel Macs running macOS 13 or later.

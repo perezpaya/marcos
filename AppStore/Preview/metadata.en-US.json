@@ -1,0 +1,79 @@
+{
+  "status": "WAITING_FOR_REVIEW",
+  "platform": "macOS",
+  "bundleIdentifier": "com.perezpaya.marcos",
+  "sku": "marcos-macos",
+  "version": "1.2.3",
+  "build": "6",
+  "primaryLocale": "en-US",
+  "name": "Marcos: Screen Tint",
+  "subtitle": "Warm colors. One click away.",
+  "promotionalText": "Give your Mac a warmer glow. Choose red, orange, or amber, set the strength, and switch it on from your menu bar. One setting for every display.",
+  "description": "A warmer screen. One click away.\n\nMarcos brings red, orange, and amber tints to your Mac. Choose a color, set the strength, and click the glasses in your menu bar to turn it on or off.\n\nFIND YOUR KIND OF WARM\nGo for a subtle glow or a deeper tint. Adjust the strength from 0 to 100% to suit what you are doing. Sliding to zero clears the tint; your next click restores your last strength.\n\nONE SETTING. EVERY DISPLAY.\nApply the same tint across your connected displays, including full-screen apps. Your chosen color and strength are saved between sessions.\n\nREADY WHEN YOU ARE\nKeep Marcos in the menu bar and optionally launch it when you log in. Right-click or Control-click the glasses for color, strength, and login options. Colored lenses mean the tint is on. Clear lenses mean it is off.\n\nYOUR MAC. YOUR SETTINGS.\nMarcos works locally. No account, advertising, tracking, or analytics. Your tint settings stay on your Mac, and Marcos does not capture or inspect screen content.\n\nBuilt for Apple silicon and Intel Macs running macOS 13 or later.",
+  "keywords": "red,orange,amber,filter,dimmer,display,night,brightness,monitor,menu bar,desktop,reading",
+  "primaryCategory": "Utilities",
+  "secondaryCategory": null,
+  "price": "Free",
+  "inAppPurchases": false,
+  "subscriptions": false,
+  "availability": {
+    "selection": "All Countries or Regions",
+    "includeFutureTerritories": true,
+    "configuredInAppStoreConnect": true,
+    "countriesOrRegions": 175
+  },
+  "audience": {
+    "intended": "General audience, all ages",
+    "expectedAppleGlobalRating": "4+",
+    "overrideToHigherAgeRating": false,
+    "madeForKids": false,
+    "status": "Saved: 4+ in 172 countries/regions; ALL in Korea; 00+ in Vietnam"
+  },
+  "privacy": "Data Not Collected",
+  "supportURL": "https://github.com/perezpaya/marcos/issues",
+  "privacyPolicyURL": "https://github.com/perezpaya/marcos/blob/main/PRIVACY.md",
+  "marketingURL": "https://github.com/perezpaya/marcos",
+  "copyright": "2026 Alejandro Perezpayá",
+  "reviewNotes": "Marcos is a menu bar app with no Dock icon. After launch, look for the glasses in the menu bar. Left-click to toggle the screen tint. Right-click or Control-click to open options. The tint is off on first launch. Choose red, orange, or amber and move the Strength slider above zero to enable it. Setting strength to zero disables the tint; clicking the menu bar icon restores the previous nonzero strength. The app applies the same tint across connected displays and full-screen apps. Launch at login is optional and disabled by default. Marcos requires no account, screen-recording permission, accessibility permission, or special hardware. It performs no network requests and collects no data. It uses standard AppKit overlay windows and SMAppService for optional login registration.",
+  "reviewContact": {
+    "status": "User-approved private contact saved in App Store Connect; omitted from public materials"
+  },
+  "screenshotOrder": [
+    "01-one-click.jpg",
+    "02-warm-colors.jpg",
+    "03-your-strength.jpg",
+    "04-all-displays.jpg",
+    "05-quietly-ready.jpg"
+  ],
+  "screenshotApproval": {
+    "approved": true,
+    "date": "2026-11-27",
+    "basis": "User requested Publish and release it in the Mac App Store after reviewing the revised MacBook screenshot"
+  },
+  "submission": {
+    "status": "WAITING_FOR_REVIEW",
+    "successfulUploadVerified": true,
+    "uploadCompletedUTC": "2026-11-27T22:25:11Z",
+    "processedBuildSelected": "1.2.3 (6)",
+    "screenshotsUploaded": 5,
+    "metadataSaved": true,
+    "automaticReleaseAfterApproval": true,
+    "remainingValidationItems": [],
+    "published": false,
+    "submissionID": "8b172785-00ab-4dda-89ea-e37a9c13ccf6",
+    "submittedAt": "2026-11-27 17:58 EST",
+    "reviewURL": "https://appstoreconnect.apple.com/apps/6840182390/distribution/reviewsubmissions/details/8b172785-00ab-4dda-89ea-e37a9c13ccf6"
+  },
+  "appStoreConnectID": "6840182390",
+  "appStoreConnectURL": "https://appstoreconnect.apple.com/apps/6840182390/distribution",
+  "internalUserAccess": "Limited Access",
+  "accountCompliance": {
+    "freeAppsAgreement": "Active",
+    "paidAppsAgreement": "Active",
+    "euDigitalServicesAct": "In Review",
+    "chinaSecurityAssessment": "Active: no applicable features",
+    "chinaAIGCServices": "Active: no AIGC services"
+  },
+  "privacyPublication": "Published: Data Not Collected",
+  "contentRights": "No third-party content; confirmed by user and saved in App Store Connect"
+}
